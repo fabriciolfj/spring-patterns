@@ -22,14 +22,13 @@ public class BookClientConfig {
 
     @Bean
     public BooksClient bookService() {
-        final HttpServiceProxyFactory proxy = HttpServiceProxyFactory
-                .builder(WebClientAdapter.forClient(
-                        WebClient.builder()
-                                .baseUrl(this.url)
-                                .defaultStatusHandler(HttpStatusCode::isError, resp ->
-                                        Mono.just(new BookServiceException(resp.toString())))
-                                .build()
-                )).build();
+        final HttpServiceProxyFactory proxy = HttpServiceProxyFactory.builderFor(WebClientAdapter.forClient(
+                WebClient.builder()
+                        .baseUrl(this.url)
+                        .defaultStatusHandler(HttpStatusCode::isError, resp ->
+                                Mono.just(new BookServiceException(resp.toString())))
+                        .build()
+        )).build();
 
         return proxy.createClient(BooksClient.class);
     }
